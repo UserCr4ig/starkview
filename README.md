@@ -1,4 +1,8 @@
-StarNet Monitoring Dashboard
+StarkNet Monitoring Dashboard
+
+StarkNet is a permissionless decentralized ZK-Rollup. It operates as an L2 network over Ethereum, enabling any dApp to achieve unlimited scale for its computation – without compromising Ethereum's composability and security.
+
+(https://starkware.co/starknet/)[https://starkware.co/starknet/]
 
 ## Getting Started
 
