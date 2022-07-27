@@ -5,22 +5,19 @@ StarkNet is a permissionless decentralized ZK-Rollup. It operates as an L2 netwo
 (https://starkware.co/starknet/)[https://starkware.co/starknet/]
 
 ## Getting Started
-
-1. First, install packages
+### 1. First, install packages
 
 ```bash
 npm install
 # or
 yarn install
 ```
-
-2. Launch DB instance with docker
+### 2. Launch DB instance with docker
 
 ```bash
 docker-compose up
 ```
-
-3. Duplicate .env.example to .env
+### 3. Duplicate .env.example to .env
 
 Change values or keep it by default
 
@@ -31,22 +28,19 @@ TWITTER_BEARER_TOKEN="AAAAAAAAAAAAAAAAAAAAAAIWfQEAAAAApYPMpJiGCtwDKXwYreQ6zhVolg
 TEST_TWITTER_HANDLE="StarkWareLtd"
 DATABASE_URL="postgres://myuser:mypassword@localhost:5432/median-db"
 ```
-
-4. Create Database Model with Prisma
+### 4. Create Database Model with Prisma
 
 ```bash
 npx prisma db push
 # and
 npx prisma generate
 ```
-
-5. Import Tweets
+### 5.  Import Tweets
 
 ```bash
 npm run seed-tweets
 ```
-
-6. Then, run the development server:
+### 6.  Then, run the development server:
 
 ```bash
 npm run dev
