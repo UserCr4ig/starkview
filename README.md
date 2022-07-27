@@ -2,7 +2,7 @@ StarkNet Monitoring Dashboard
 
 StarkNet is a permissionless decentralized ZK-Rollup. It operates as an L2 network over Ethereum, enabling any dApp to achieve unlimited scale for its computation – without compromising Ethereum's composability and security.
 
-(https://starkware.co/starknet/)[https://starkware.co/starknet/]
+[https://starkware.co/starknet/](https://starkware.co/starknet/)
 
 ## Getting Started
 ### 1. First, install packages
@@ -19,7 +19,7 @@ docker-compose up
 ```
 ### 3. Duplicate .env.example to .env
 
-Change values or keep it by default
+Change values or keep by default
 
 ```
 TWITTER_CONSUMER_KEY="GBicen3gGCBNRBav0lBkI6gT1"
