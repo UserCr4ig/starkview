@@ -18,3 +18,11 @@ model Tweet {
   source     String
   created_at String
 }
+
+model Repo {
+  id          String @id @default(cuid())
+  name        String
+  forks       Int
+  open_issues Int
+  watchers    Int
+}

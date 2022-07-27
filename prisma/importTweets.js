@@ -7,7 +7,6 @@ const getTweets = async () => {
     await prisma.tweet.deleteMany();
     console.log("Deleted records in tweet table");
 
-    //let searchTweets = await fetchSearch("starknet");
     const client = new Twitter({
       version: "2",
       extension: false,
@@ -16,7 +15,6 @@ const getTweets = async () => {
 
     let searchTweetsResponse = await client.get("tweets/search/recent", { query: "starknet", expansions: "author_id", "tweet.fields": "author_id,created_at,source,text", "user.fields": "id,url,username" });
     let searchTweets = searchTweetsResponse.data;
-    console.log("searchTweets", searchTweetsResponse);
 
     searchTweets.forEach((tweet) => {
       tweet["authorId"] = tweet["author_id"];
