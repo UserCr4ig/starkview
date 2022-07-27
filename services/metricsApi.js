@@ -8,8 +8,6 @@ function getGithubRepo(organization, name) {
   if (error) return <>failed to load</>;
   if (!data) return <>loading...</>;
 
-  console.log(data);
-
   return data;
 }
 
@@ -19,8 +17,6 @@ function getCountTransactions(testnet = true) {
   if (error) return <>failed to load</>;
   if (!data) return <>loading...</>;
 
-  console.log(data);
-
   return <>{data.lastPage}</>;
 }
 
@@ -29,8 +25,6 @@ function getCountContracts(testnet = true) {
 
   if (error) return <>failed to load</>;
   if (!data) return <>loading...</>;
-
-  console.log(data);
 
   return <>{data.lastPage}</>;
 }

@@ -1,53 +1,36 @@
-// import { TwitterApi } from "../services/twitterApi";
+import { TwitterApi } from "../services/twitterApi";
+import Link from "next/link";
+import prisma from "../lib/prisma";
 
-// // function TwitterCard(props) {
-// //   let profileImageURL = props.twitterInfo.profileImageURL.replace(/_normal/g, "");
+function TweetCard(props) {
+  return (
+    <Link href={`https://twitter.com/i/web/status/${props.tweetId}`}>
+      <a>
+        <p className="">{props.tweetId}</p>
+        <p className="">{props.text}</p>
+      </a>
+    </Link>
+  );
+}
 
-// //   return (
-// //     <div className="p-2 border rounded-md w-auto overflow-hidden">
-// //       <div className="relative">
-// //         <img className="mx-auto" src={props.twitterInfo.profileBannerURL} />
-// //         <div className="top-14 absolute left-4 lg:top-24 border-4 border-white rounded-full">
-// //           <img className="rounded-full h-24 w-24" src={profileImageURL} />
-// //         </div>
-// //       </div>
-// //       <div className="mt-28 lg:mt-16 px-4">
-// //         <p className="font-bold text-lg leading-6">{props.twitterInfo.name}</p>
-// //         <p className="text-sm text-gray-600">@{props.twitterInfo.screenName}</p>
-// //         <p className="mt-4 text-sm whitespace-pre-wrap">{props.twitterInfo.description}</p>
-// //       </div>
-// //     </div>
-// //   );
-// // }
+export default function Twitter(props) {
+  return <div>{!props.tweets ? <p>Couldn't fetch information from Twitter</p> : props.tweets.map((tweet, key) => <TweetCard key={key} text={tweet.text} tweetId={tweet.tweetId} />)}</div>;
+}
 
-// export default function Twitter(props) {
-//   // return (
-//   //   <div className="p-2 max-w-xs lg:max-w-md mx-auto mt-12">
-//   //     <h2 className="text-2xl font-semibold">Twitter Card</h2>
-//   //     <div className="mt-8">{!props.twitterInfo ? <p>Couldn't fetch information from Twitter</p> : <TwitterCard twitterInfo={props.twitterInfo} />}</div>
-//   //   </div>
-//   // );
-// }
-
-// export async function getServerSideProps(context) {
-//   // let twitterHandle = process.env.TEST_TWITTER_HANDLE;
-//   // let twitterInfo = null;
-
-//   // const userResponse = await fetchUser(twitterHandle);
-//   // twitterInfo = {
-//   //   screenName: userResponse.screen_name,
-//   //   name: userResponse.name,
-//   //   profileImageURL: userResponse.profile_image_url_https,
-//   //   profileBannerURL: userResponse.profile_banner_url,
-//   //   description: userResponse.description,
-//   // };
-
+// export async function getServerSideProps({ res }) {
+//   res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=7200");
 //   const searchResponse = await TwitterApi.fetchSearch("starknet");
-//   console.log(searchResponse);
-
 //   return {
 //     props: {
-//       //twitterInfo: twitterInfo,
+//       tweets: searchResponse.data,
+//       users: searchResponse.includes.users,
 //     },
 //   };
 // }
+
+export async function getServerSideProps() {
+  const tweets = await prisma.tweet.findMany();
+  return {
+    props: { tweets },
+  };
+}

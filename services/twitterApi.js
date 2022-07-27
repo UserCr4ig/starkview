@@ -1,22 +1,24 @@
-// import Twitter from "twitter-lite";
+const Twitter = require("twitter-lite");
 
 // async function fetchUser(screen_name) {
 //   const client = new Twitter({
-//     version: "1.1",
+//     version: "2",
+//     extension: false,
 //     bearer_token: process.env.TWITTER_BEARER_TOKEN,
 //   });
 
 //   return client.get("users/show", { screen_name: screen_name });
 // }
 
-// async function fetchSearch(keyword) {
-//   const client = new Twitter({
-//     version: "1.1",
-//     bearer_token: process.env.TWITTER_BEARER_TOKEN,
-//   });
+const fetchSearch = async (keyword) => {
+  const client = new Twitter({
+    version: "2",
+    extension: false,
+    bearer_token: process.env.TWITTER_BEARER_TOKEN,
+  });
 
-//   return client.get("search/tweets", { q: keyword, result_type: "popular" });
-// }
+  return client.get("tweets/search/recent", { query: keyword, expansions: "author_id", "tweet.fields": "author_id,created_at,source,text", "user.fields": "id,url,username" });
+};
 
 // export const TwitterApi = {
 //   fetchUser,

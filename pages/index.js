@@ -35,7 +35,7 @@ export default function Home() {
             <h2 className="text-2xl font-bold mb-3">Metrics</h2>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <CardMetric value="750" label="TVL" />
-              <CardMetric value={MetricsApi.getCountContracts(false)} label="Contracts (Mainet)" />
+              <CardMetric value="" label="Contracts (Mainet)" />
             </div>
             <div className="grid grid-cols-4 gap-4 mb-4">
               <CardMetric value={MetricsApi.getCountTransactions(false)} label="Transactions (Mainet)" />
@@ -57,7 +57,7 @@ export default function Home() {
               <h2 className="text-xl font-bold mb-3">Twitter Activity</h2>
               <div className="grid grid-cols-2 gap-4">
                 <div>SEARCH TWITTER</div>
-                <a class="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                <a className="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
               </div>
             </div>
           </div>
