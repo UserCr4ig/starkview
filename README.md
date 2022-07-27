@@ -10,13 +10,15 @@ npm install
 yarn install
 ```
 
-2. Deploy docker image
+2. Launch DB instance with docker
 
 ```bash
 docker-compose up
 ```
 
-3. Change values in .env.local
+3. Duplicate .env.example to .env
+
+Change values or keep it by default
 
 ```
 TWITTER_CONSUMER_KEY="GBicen3gGCBNRBav0lBkI6gT1"
@@ -30,9 +32,17 @@ DATABASE_URL="postgres://myuser:mypassword@localhost:5432/median-db"
 
 ```bash
 npx prisma db push
+# and
+npx prisma generate
 ```
 
-5. Then, run the development server:
+5. Import Tweets
+
+```bash
+npm run seed-tweets
+```
+
+6. Then, run the development server:
 
 ```bash
 npm run dev
@@ -40,6 +50,6 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the dashboard.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
