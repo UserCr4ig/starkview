@@ -20,14 +20,14 @@ docker-compose up
 ```
 ### 3. Duplicate .env.example to .env
 
-Change values or keep by default
+Change config values
 
 ```
-TWITTER_CONSUMER_KEY="GBicen3gGCBNRBav0lBkI6gT1"
-TWITTER_CONSUMER_KEY_SECRET="PfxYby5njOy3IQEVb8qogQgi1mHv1kKDiQdthamPkoKHrnExEY"
-TWITTER_BEARER_TOKEN="AAAAAAAAAAAAAAAAAAAAAAIWfQEAAAAApYPMpJiGCtwDKXwYreQ6zhVolgQ%3DADCJeNkfjW9sYxBtKltgF7eFhQ8TUkvg3aWB6kNdcZtwRI8HWw"
+TWITTER_CONSUMER_KEY=""
+TWITTER_CONSUMER_KEY_SECRET=""
+TWITTER_BEARER_TOKEN=""
 TEST_TWITTER_HANDLE="StarkWareLtd"
-DATABASE_URL="postgres://myuser:mypassword@localhost:5432/median-db"
+DATABASE_URL=""
 ```
 ### 4. Create Database Model with Prisma
 
