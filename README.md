@@ -1,4 +1,5 @@
-StarkNet Monitoring Dashboard
+# StarkView 
+## StarkNet Monitoring Dashboard
 
 StarkNet is a permissionless decentralized ZK-Rollup. It operates as an L2 network over Ethereum, enabling any dApp to achieve unlimited scale for its computation – without compromising Ethereum's composability and security.
 
@@ -35,10 +36,12 @@ npx prisma db push
 # and
 npx prisma generate
 ```
-### 5.  Import Tweets
+### 5.  Import Tweets / Repos
 
 ```bash
 npm run seed-tweets
+# and
+npm run seed-repos
 ```
 ### 6.  Then, run the development server:
 
