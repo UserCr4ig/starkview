@@ -35,24 +35,37 @@ function getBridgeDeposits() {
 
   const { data, error } = useSWR(
     `{
-      depositEvents(where: {status: FINISHED, amount_gt: 0}) {
-        id
-        bridgeAddressL1
-        bridgeAddressL2
-        l2Recipient
-        amount
+      depositEvents(where: {status: FINISHED, amount_gt: 0} orderBy: finishedAtDate) {
         finishedAtDate
+        amount
       }
     }`,
     fetcher
   );
 
   if (error) return <>failed to load</>;
-  if (!data) return <>loading...</>;
+  if (!data) return [];
 
-  console.log(data);
+  return data.depositEvents;
+}
 
-  return <>data</>;
+function getBridgeWithdraws() {
+  const fetcher = (query) => request("https://api.thegraph.com/subgraphs/name/in19farkt/starknet-bridge-staging", query);
+
+  const { data, error } = useSWR(
+    `{
+      withdrawalEvents(where: {status: FINISHED, amount_gt: 0} orderBy: finishedAtDate) {
+        finishedAtDate
+        amount
+      }
+    }`,
+    fetcher
+  );
+
+  if (error) return <>failed to load</>;
+  if (!data) return [];
+
+  return data.withdrawalEvents;
 }
 
 export const MetricsApi = {
@@ -60,4 +73,5 @@ export const MetricsApi = {
   getCountTransactions,
   getCountContracts,
   getBridgeDeposits,
+  getBridgeWithdraws,
 };
