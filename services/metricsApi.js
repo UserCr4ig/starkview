@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { request } from "graphql-request";
 
 //const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -29,8 +30,34 @@ function getCountContracts(testnet = true) {
   return <>{data.lastPage}</>;
 }
 
+function getBridgeDeposits() {
+  const fetcher = (query) => request("https://api.thegraph.com/subgraphs/name/in19farkt/starknet-bridge-staging", query);
+
+  const { data, error } = useSWR(
+    `{
+      depositEvents(where: {status: FINISHED, amount_gt: 0}) {
+        id
+        bridgeAddressL1
+        bridgeAddressL2
+        l2Recipient
+        amount
+        finishedAtDate
+      }
+    }`,
+    fetcher
+  );
+
+  if (error) return <>failed to load</>;
+  if (!data) return <>loading...</>;
+
+  console.log(data);
+
+  return <>data</>;
+}
+
 export const MetricsApi = {
   getGithubRepo,
   getCountTransactions,
   getCountContracts,
+  getBridgeDeposits,
 };

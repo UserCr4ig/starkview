@@ -3,6 +3,7 @@ import Image from "next/image";
 import CardMetric from "../components/cardMetric";
 import CardGithub from "../components/cardGithub";
 import { MetricsApi } from "../services/metricsApi";
+import LineChart from "@d3/line-chart";
 
 const githubReposToFollow = [
   { organization: "starkware-libs", name: "cairo-lang" },
@@ -15,6 +16,16 @@ const githubReposToFollow = [
 
 export default function Home() {
   const reposDatas = githubReposToFollow.map((repo) => MetricsApi.getGithubRepo(repo.organization, repo.name));
+  const deposits = MetricsApi.getBridgeDeposits();
+
+  const chart = LineChart(deposits, {
+    x: (d) => d.finishedAtDate,
+    y: (d) => d.amount / 8,
+    yLabel: "↑ Daily close ($)",
+    width: 400,
+    height: 500,
+    color: "steelblue",
+  });
 
   return (
     <div className="container mx-auto p-6">
@@ -28,6 +39,7 @@ export default function Home() {
         <div className="py-4">
           <h1 className="text-5xl font-bold">StarkView</h1>
           <p>Ultimate StarkNet Dashboard</p>
+          {chart}
         </div>
 
         <div className="py-4">
@@ -57,7 +69,7 @@ export default function Home() {
               <h2 className="text-xl font-bold mb-3">Twitter Activity</h2>
               <div className="grid grid-cols-2 gap-4">
                 <div>SEARCH TWITTER</div>
-                <a className="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                <a className="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
               </div>
             </div>
           </div>
@@ -66,7 +78,7 @@ export default function Home() {
         <div className=""></div>
       </main>
 
-      <footer className="text-sm">Copyright StarkView - by @khelil</footer>
+      <footer className="text-sm">Copyright StarkView - made with 🚀 by @khelil</footer>
     </div>
   );
 }
