@@ -13,21 +13,36 @@ function getGithubRepo(organization, name) {
 }
 
 function getCountTransactions(testnet = true) {
-  const { data, error } = useSWR(`https://${testnet ? "goerli." : ""}voyager.online/api/txns?ps=10&p=1`);
+  const { data: firstPage } = useSWR(`https://${testnet ? "goerli." : ""}voyager.online/api/txns?ps=10&p=1`);
+  const { data: lastPage } = useSWR(() => `https://${testnet ? "goerli." : ""}voyager.online/api/txns?ps=10&p=${firstPage.lastPage}`);
 
-  if (error) return <>failed to load</>;
-  if (!data) return <>loading...</>;
+  if (!lastPage) return <>loading...</>;
 
-  return <>{data.lastPage}</>;
+  const nbreTransactions = (firstPage.lastPage - 1) * 10 + lastPage.items.length;
+
+  return nbreTransactions;
 }
 
 function getCountContracts(testnet = true) {
-  const { data, error } = useSWR(`https://${testnet ? "goerli." : ""}voyager.online/api/contracts?ps=10&p=1`);
+  const { data: firstPage } = useSWR(`https://${testnet ? "goerli." : ""}voyager.online/api/contracts?ps=10&p=1`);
+  const { data: lastPage } = useSWR(() => `https://${testnet ? "goerli." : ""}voyager.online/api/contracts?ps=10&p=${firstPage.lastPage}`);
 
-  if (error) return <>failed to load</>;
-  if (!data) return <>loading...</>;
+  if (!lastPage) return <>loading...</>;
 
-  return <>{data.lastPage}</>;
+  const nbreContracts = (firstPage.lastPage - 1) * 10 + lastPage.items.length;
+
+  return nbreContracts;
+}
+
+function getCountBlocks(testnet = true) {
+  const { data: firstPage } = useSWR(`https://${testnet ? "goerli." : ""}voyager.online/api/blocks?ps=10&p=1`);
+  const { data: lastPage } = useSWR(() => `https://${testnet ? "goerli." : ""}voyager.online/api/blocks?ps=10&p=${firstPage.lastPage}`);
+
+  if (!lastPage) return <>loading...</>;
+
+  const nbreBlocks = (firstPage.lastPage - 1) * 10 + lastPage.items.length;
+
+  return nbreBlocks;
 }
 
 function getBridgeDeposits() {
@@ -72,6 +87,7 @@ export const MetricsApi = {
   getGithubRepo,
   getCountTransactions,
   getCountContracts,
+  getCountBlocks,
   getBridgeDeposits,
   getBridgeWithdraws,
 };

@@ -132,11 +132,13 @@ export default function Home() {
               <CardMetric value={etherBalance} label="ETH IN BRIDGE" />
               <CardMetric value={etherTestnetBalance} label="ETH IN BRIDGE (Goerli)" />
             </div>
-            <div className="grid grid-cols-4 gap-4 mb-4">
+            <div className="grid grid-cols-6 gap-4 mb-4">
               <CardMetric value={MetricsApi.getCountTransactions(false)} label="Transactions (Mainet)" />
               <CardMetric value={MetricsApi.getCountContracts(false)} label="Contracts (Mainet)" />
+              <CardMetric value={MetricsApi.getCountBlocks(false)} label="Blocks (Mainet)" />
               <CardMetric value={MetricsApi.getCountTransactions()} label="Transactions (Goerli)" />
               <CardMetric value={MetricsApi.getCountContracts()} label="Contracts (Goerli)" />
+              <CardMetric value={MetricsApi.getCountBlocks()} label="Blocks (Goerli)" />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
