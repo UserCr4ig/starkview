@@ -2,32 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@use "~inter-ui/default" with ($inter-font-display: swap, $inter-font-path: "~inter-ui/Inter (web)");
+@use "~inter-ui/variable" with ($inter-font-display: swap, $inter-font-path: "~inter-ui/Inter (web)");
+@include default.all;
+@include variable.all;
+
+html {
+  font-family: "Inter", "system-ui";
+}
+
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: "Inter var", "system-ui";
+  }
+}
+
 html,
 body {
   @apply bg-gray-900 text-white;
 }
-/* html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
-} */
