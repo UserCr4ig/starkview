@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import logo from "../public/StarkNet_logo.png";
@@ -9,6 +10,23 @@ import moment from "moment";
 import React from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import Web3 from "web3";
+
+async function getEthBalanceMainet() {
+  const web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/42a558e0d5fb40c0b7fd0cd64b542b6f"));
+  const tokenHolder = "0xae0Ee0A63A2cE6BaeEFFE56e7714FB4EFE48D419";
+  const balance = await web3.eth.getBalance(tokenHolder);
+  const etherBalance = web3.utils.fromWei(balance, "ether");
+  return etherBalance;
+}
+
+async function getEthBalanceTestnet() {
+  const web3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/42a558e0d5fb40c0b7fd0cd64b542b6f"));
+  const tokenHolder = "0xae0Ee0A63A2cE6BaeEFFE56e7714FB4EFE48D419";
+  const balance = await web3.eth.getBalance(tokenHolder);
+  const etherBalance = web3.utils.fromWei(balance, "ether");
+  return etherBalance;
+}
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -23,9 +41,19 @@ const githubReposToFollow = [
 
 export default function Home() {
   //const reposDatas = githubReposToFollow.map((repo) => MetricsApi.getGithubRepo(repo.organization, repo.name));
+  const [etherBalance, setEtherBalance] = useState(null);
+  const [etherTestnetBalance, setTestnetEtherBalance] = useState(null);
   const reposDatas = [];
   const deposits = MetricsApi.getBridgeDeposits();
   const withdraws = MetricsApi.getBridgeWithdraws();
+
+  getEthBalanceMainet().then((result) => {
+    setEtherBalance(result);
+  });
+
+  getEthBalanceTestnet().then((result) => {
+    setTestnetEtherBalance(result);
+  });
 
   // console.log("repos");
   // console.log(reposDatas);
@@ -101,14 +129,14 @@ export default function Home() {
           </div>
           <div className="bg-gray-800 p-3 rounded-lg p-5 mb-4">
             <div className="grid grid-cols-2 gap-4 mb-4">
-              <CardMetric value="750" label="TVL" />
-              <CardMetric value="" label="Contracts (Mainet)" />
+              <CardMetric value={etherBalance} label="ETH IN BRIDGE" />
+              <CardMetric value={etherTestnetBalance} label="ETH IN BRIDGE (Goerli)" />
             </div>
             <div className="grid grid-cols-4 gap-4 mb-4">
               <CardMetric value={MetricsApi.getCountTransactions(false)} label="Transactions (Mainet)" />
               <CardMetric value={MetricsApi.getCountContracts(false)} label="Contracts (Mainet)" />
-              <CardMetric value={MetricsApi.getCountTransactions()} label="Transactions (Goerli Testnet)" />
-              <CardMetric value={MetricsApi.getCountContracts()} label="Contracts (Goerli Testnet)" />
+              <CardMetric value={MetricsApi.getCountTransactions()} label="Transactions (Goerli)" />
+              <CardMetric value={MetricsApi.getCountContracts()} label="Contracts (Goerli)" />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -133,7 +161,12 @@ export default function Home() {
         <div className=""></div>
       </main>
 
-      <footer className="text-sm">Copyright StarkView - made with 🚀 by @khelil</footer>
+      <footer className="text-sm">
+        Copyright StarkView - made with 🚀 by{" "}
+        <a href="https://twitter.com/khelil" target="_blank">
+          @khelil
+        </a>
+      </footer>
     </div>
   );
 }
