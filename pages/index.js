@@ -6,6 +6,8 @@ import CardMetric from "../components/cardMetric";
 import CardGithub from "../components/cardGithub";
 import { MetricsApi } from "../services/metricsApi";
 import moment from "moment";
+import Twitter from "./twitter";
+import prisma from "../lib/prisma";
 
 import React from "react";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
@@ -30,20 +32,17 @@ async function getEthBalanceTestnet() {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const githubReposToFollow = [
-  { organization: "starkware-libs", name: "cairo-lang" },
-  { organization: "starknet-community-libs", name: "get-starknet" },
-  { organization: "0xs34n", name: "starknet.js" },
-  { organization: "software-mansion", name: "starknet.py" },
-  { organization: "OpenZeppelin", name: "nile" },
-  { organization: "Shard-Labs", name: "starknet-devnet" },
-];
+export async function getServerSideProps() {
+  const tweets = await prisma.tweet.findMany();
+  const repos = await prisma.repo.findMany();
+  return {
+    props: { tweets, repos },
+  };
+}
 
-export default function Home() {
-  //const reposDatas = githubReposToFollow.map((repo) => MetricsApi.getGithubRepo(repo.organization, repo.name));
+export default function Home(props) {
   const [etherBalance, setEtherBalance] = useState(null);
   const [etherTestnetBalance, setTestnetEtherBalance] = useState(null);
-  const reposDatas = [];
   const deposits = MetricsApi.getBridgeDeposits();
   const withdraws = MetricsApi.getBridgeWithdraws();
 
@@ -76,14 +75,16 @@ export default function Home() {
   };
 
   const depositAmounts = deposits.map((deposit, key) => {
+    const web3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/42a558e0d5fb40c0b7fd0cd64b542b6f"));
     deposit.x = moment.unix(deposit.finishedAtDate).format("MM/DD/YYYY");
-    deposit.y = deposit.amount;
+    deposit.y = web3.utils.fromWei(deposit.amount, "ether");
     return deposit;
   });
 
   const withdrawAmounts = withdraws.map((withdraw, key) => {
+    const web3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/42a558e0d5fb40c0b7fd0cd64b542b6f"));
     withdraw.x = moment.unix(withdraw.finishedAtDate).format("MM/DD/YYYY");
-    withdraw.y = withdraw.amount;
+    withdraw.y = web3.utils.fromWei(withdraw.amount, "ether");
     return withdraw;
   });
 
@@ -128,6 +129,7 @@ export default function Home() {
             <Bar options={options} data={data} />
           </div>
           <div className="bg-gray-800 p-3 rounded-lg p-5 mb-4">
+            <h2 className="text-2xl font-bold mb-3">StarkNet Metrics</h2>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <CardMetric value={etherBalance} label="ETH IN BRIDGE" />
               <CardMetric value={etherTestnetBalance} label="ETH IN BRIDGE (Goerli)" />
@@ -142,19 +144,26 @@ export default function Home() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-800 p-3 rounded-lg p-5">
-              <h2 className="text-xl font-bold mb-3">Github Activity</h2>
-              <div className="grid grid-cols-2 gap-4">
-                {reposDatas.map((repo, key) => {
-                  return <CardGithub key={key} forks={repo.forks} name={repo.name} watchers={repo.watchers} open_issues={repo.open_issues} />;
-                })}
+            <div>
+              <div className="bg-gray-800 p-3 rounded-lg p-5">
+                <h2 className="text-xl font-bold mb-3">Github Activity</h2>
+                <div className="grid grid-cols-2 gap-4">
+                  {props.repos &&
+                    props.repos.map((repo, key) => {
+                      return <CardGithub key={key} forks={repo.forks} name={repo.name} watchers={repo.watchers} open_issues={repo.open_issues} />;
+                    })}
+                </div>
               </div>
             </div>
-            <div className="bg-gray-800 p-3 rounded-lg p-5">
-              <h2 className="text-xl font-bold mb-3">Twitter Activity</h2>
-              <div className="grid grid-cols-2 gap-4">
-                <div>SEARCH TWITTER</div>
-                <a className="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+            <div>
+              <div className="bg-gray-800 p-3 rounded-lg p-5">
+                <h2 className="text-xl font-bold mb-3">Twitter Activity</h2>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Twitter tweets={props.tweets} />
+                  </div>
+                  <a className="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+                </div>
               </div>
             </div>
           </div>
@@ -165,7 +174,7 @@ export default function Home() {
 
       <footer className="text-sm">
         Copyright StarkView - made with 🚀 by{" "}
-        <a href="https://twitter.com/khelil" target="_blank">
+        <a href="https://twitter.com/khelil" target="_blank" rel="noreferrer">
           @khelil
         </a>
       </footer>
