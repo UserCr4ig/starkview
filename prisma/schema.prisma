@@ -22,7 +22,9 @@ model Tweet {
 model Repo {
   id          String @id @default(cuid())
   name        String
+  url         String
   forks       Int
   open_issues Int
   watchers    Int
+  stars       Int
 }

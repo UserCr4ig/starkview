@@ -32,9 +32,11 @@ const importRepos = async () => {
         let repo = {};
         console.log(result);
         repo["name"] = result["name"];
+        repo["url"] = result["html_url"];
         repo["forks"] = result["forks"];
         repo["open_issues"] = result["open_issues"];
         repo["watchers"] = result["watchers"];
+        repo["stars"] = result["stargazers_count"];
         return repo;
       });
       await prisma.repo.createMany({

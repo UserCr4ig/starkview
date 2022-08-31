@@ -83,6 +83,16 @@ function getBridgeWithdraws() {
   return data.withdrawalEvents;
 }
 
+function getDownloadsNpm() {
+  var packageName = "starknet";
+  const { data, error } = useSWR(`https://api.npmjs.org/downloads/range/last-month/starknet`);
+
+  if (error) return [];
+  if (!data) return [];
+
+  return data.downloads;
+}
+
 export const MetricsApi = {
   getGithubRepo,
   getCountTransactions,
@@ -90,4 +100,5 @@ export const MetricsApi = {
   getCountBlocks,
   getBridgeDeposits,
   getBridgeWithdraws,
+  getDownloadsNpm,
 };
