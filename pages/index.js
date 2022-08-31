@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import logo from "../public/StarkNet_logo.png";
+import logo from "../public/starknet_logo.png";
 import CardMetric from "../components/cardMetric";
 import CardGithub from "../components/cardGithub";
 import { MetricsApi } from "../services/metricsApi";
@@ -116,7 +116,7 @@ export default function Home(props) {
 
       <main className="">
         <div className="flex py-4">
-          <Image src={logo} width="70" height="70" />
+          <Image src={logo} width="70" height="70" alt="StarkView" />
           <div className="pl-3">
             <h1 className="text-5xl font-bold">StarkView</h1>
             <p>Ultimate StarkNet Dashboard</p>
