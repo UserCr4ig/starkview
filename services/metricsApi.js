@@ -46,7 +46,7 @@ function getCountBlocks(testnet = true) {
 }
 
 function getBridgeDeposits() {
-  const fetcher = (query) => request("https://api.thegraph.com/subgraphs/name/in19farkt/starknet-bridge-staging", query);
+  const fetcher = (query) => request("https://api.thegraph.com/subgraphs/name/khelil/starknet-bridge-staging", query);
 
   const { data, error } = useSWR(
     `{
@@ -65,7 +65,7 @@ function getBridgeDeposits() {
 }
 
 function getBridgeWithdraws() {
-  const fetcher = (query) => request("https://api.thegraph.com/subgraphs/name/in19farkt/starknet-bridge-staging", query);
+  const fetcher = (query) => request("https://api.thegraph.com/subgraphs/name/khelil/starknet-bridge-staging", query);
 
   const { data, error } = useSWR(
     `{
