@@ -3,6 +3,7 @@ const prisma = new PrismaClient();
 const Twitter = require("twitter-lite");
 
 const getTweets = async () => {
+  console.log("getTweets");
   try {
     await prisma.tweet.deleteMany();
     console.log("Deleted records in tweet table");
@@ -38,6 +39,7 @@ const getTweets = async () => {
 };
 
 const getCountTweets = async () => {
+  console.log("getCountTweets");
   try {
     const client = new Twitter({
       version: "2",
@@ -45,10 +47,15 @@ const getCountTweets = async () => {
       bearer_token: process.env.TWITTER_BEARER_TOKEN,
     });
 
-    let countTweetsResponse = await client.get("tweets/counts/recent", { query: "starknet", start_time: "2022-09-05T00:00:00.000Z", end_time: "2022-09-10T00:00:00.000Z", granularity: "day" });
+    let countTweetsResponse = await client.get("tweets/counts/recent", { query: "starknet", start_time: "2022-09-06T00:00:00.000Z", end_time: "2022-09-12T00:00:00.000Z", granularity: "day" });
     let countTweets = countTweetsResponse.data;
 
     console.log("countTweets", countTweets);
+
+    await prisma.tweetCount.createMany({
+      data: countTweets,
+    });
+    console.log("Added count tweets");
 
     // result
     // countTweets [
@@ -87,11 +94,12 @@ const getCountTweets = async () => {
     console.error(e);
     process.exit(1);
   } finally {
-    //await prisma.$disconnect();
+    await prisma.$disconnect();
   }
 };
 
 const getUserFollowing = async () => {
+  console.log("getUserFollowing");
   try {
     const client = new Twitter({
       version: "2",
@@ -112,6 +120,7 @@ const getUserFollowing = async () => {
 };
 
 const getUserFollowers = async () => {
+  console.log("getUserFollowers");
   try {
     const client = new Twitter({
       version: "2",
@@ -131,7 +140,7 @@ const getUserFollowers = async () => {
   }
 };
 
-getUserFollowers();
-//getUserFollowing();
-//getCountTweets();
+// getUserFollowers();
+// getUserFollowing();
+getCountTweets();
 //getTweets();

@@ -19,6 +19,13 @@ model Tweet {
   created_at String
 }
 
+model TweetCount {
+  id          String @id @default(cuid())
+  tweet_count Int
+  end         String
+  start       String
+}
+
 model Repo {
   id          String @id @default(cuid())
   name        String
