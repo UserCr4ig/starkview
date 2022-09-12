@@ -36,8 +36,9 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarEleme
 export async function getServerSideProps() {
   const tweets = await prisma.tweet.findMany();
   const repos = await prisma.repo.findMany();
+  const tweetCount = await prisma.tweetCount.findMany();
   return {
-    props: { tweets, repos },
+    props: { tweets, repos, tweetCount },
   };
 }
 
@@ -110,6 +111,33 @@ export default function Home(props) {
     },
   };
 
+  const optionsTweetsCount = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          color: "#FFFFFF",
+        },
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      xAxis: {
+        ticks: {
+          color: "#FFFFFF",
+        },
+      },
+      yAxis: {
+        ticks: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+  };
+
   const depositAmounts = deposits.map((deposit, key) => {
     const web3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/42a558e0d5fb40c0b7fd0cd64b542b6f"));
     deposit.x = moment.unix(deposit.finishedAtDate).format("MM/DD/YYYY");
@@ -128,6 +156,12 @@ export default function Home(props) {
     download.x = download.day;
     download.y = download.downloads;
     return download;
+  });
+
+  const tweetsPerDay = props.tweetCount.map((tweetCount, key) => {
+    tweetCount.x = moment(tweetCount.end).format("MM/DD/YYYY");
+    tweetCount.y = tweetCount.tweet_count;
+    return tweetCount;
   });
 
   const data = {
@@ -152,6 +186,17 @@ export default function Home(props) {
       {
         label: "Downloads last 30 days",
         data: downloadsCount,
+        borderColor: "rgb(53, 125, 167)",
+        backgroundColor: "rgba(53, 125, 167, 0.8)",
+      },
+    ],
+  };
+
+  const dataTweetCount = {
+    datasets: [
+      {
+        label: "Tweets per day",
+        data: tweetsPerDay,
         borderColor: "rgb(53, 125, 167)",
         backgroundColor: "rgba(53, 125, 167, 0.8)",
       },
@@ -225,9 +270,16 @@ export default function Home(props) {
             </div>
           </div>
           <div className="bg-gray-800 p-3 rounded-lg p-5">
-            <h2 className="text-xl font-bold mb-3">Twitter Activity</h2>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <h2 className="text-xl font-bold mb-3">Twitter Activity</h2>
+                <Line options={optionsTweetsCount} data={dataTweetCount} />
+              </div>
+              <div>
+                <a className="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+              </div>
+            </div>
             <Twitter tweets={props.tweets} />
-            {/* <a className="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script> */}
           </div>
         </div>
 

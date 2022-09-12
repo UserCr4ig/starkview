@@ -56,40 +56,6 @@ const getCountTweets = async () => {
       data: countTweets,
     });
     console.log("Added count tweets");
-
-    // result
-    // countTweets [
-    //   {
-    //     end: '2022-09-06T00:00:00.000Z',
-    //     start: '2022-09-05T07:20:50.000Z',
-    //     tweet_count: 1014
-    //   },
-    //   {
-    //     end: '2022-09-07T00:00:00.000Z',
-    //     start: '2022-09-06T00:00:00.000Z',
-    //     tweet_count: 835
-    //   },
-    //   {
-    //     end: '2022-09-08T00:00:00.000Z',
-    //     start: '2022-09-07T00:00:00.000Z',
-    //     tweet_count: 841
-    //   },
-    //   {
-    //     end: '2022-09-09T00:00:00.000Z',
-    //     start: '2022-09-08T00:00:00.000Z',
-    //     tweet_count: 871
-    //   },
-    //   {
-    //     end: '2022-09-10T00:00:00.000Z',
-    //     start: '2022-09-09T00:00:00.000Z',
-    //     tweet_count: 871
-    //   },
-    //   {
-    //     end: '2022-09-10T07:20:50.000Z',
-    //     start: '2022-09-10T00:00:00.000Z',
-    //     tweet_count: 160
-    //   }
-    // ]
   } catch (e) {
     console.error(e);
     process.exit(1);
@@ -143,4 +109,4 @@ const getUserFollowers = async () => {
 // getUserFollowers();
 // getUserFollowing();
 getCountTweets();
-//getTweets();
+getTweets();
