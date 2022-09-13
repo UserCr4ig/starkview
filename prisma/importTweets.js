@@ -38,21 +38,53 @@ const getTweets = async () => {
   }
 };
 
-const getCountTweets = async () => {
-  console.log("getCountTweets");
+const getCountTweetsStarknet = async () => {
+  console.log("getCountTweetsStarknet");
   try {
+    await prisma.tweetCountStarknet.deleteMany();
+
     const client = new Twitter({
       version: "2",
       extension: false,
       bearer_token: process.env.TWITTER_BEARER_TOKEN,
     });
 
-    let countTweetsResponse = await client.get("tweets/counts/recent", { query: "starknet", start_time: "2022-09-06T00:00:00.000Z", end_time: "2022-09-12T00:00:00.000Z", granularity: "day" });
+    //let countTweetsResponse = await client.get("tweets/counts/recent", { query: "starknet", start_time: "2022-09-06T00:00:00.000Z", end_time: "2022-09-12T00:00:00.000Z", granularity: "day" });
+    let countTweetsResponse = await client.get("tweets/counts/recent", { query: "starknet", granularity: "day" });
     let countTweets = countTweetsResponse.data;
 
     console.log("countTweets", countTweets);
 
-    await prisma.tweetCount.createMany({
+    await prisma.tweetCountStarknet.createMany({
+      data: countTweets,
+    });
+    console.log("Added count tweets");
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+const getCountTweetsStarware = async () => {
+  console.log("getCountTweetsStarware");
+  try {
+    await prisma.tweetCountStarkware.deleteMany();
+
+    const client = new Twitter({
+      version: "2",
+      extension: false,
+      bearer_token: process.env.TWITTER_BEARER_TOKEN,
+    });
+
+    //let countTweetsResponse = await client.get("tweets/counts/recent", { query: "starknet", start_time: "2022-09-06T00:00:00.000Z", end_time: "2022-09-12T00:00:00.000Z", granularity: "day" });
+    let countTweetsResponse = await client.get("tweets/counts/recent", { query: "starkware", granularity: "day" });
+    let countTweets = countTweetsResponse.data;
+
+    console.log("countTweets", countTweets);
+
+    await prisma.tweetCountStarkware.createMany({
       data: countTweets,
     });
     console.log("Added count tweets");
@@ -108,5 +140,6 @@ const getUserFollowers = async () => {
 
 getUserFollowers();
 getUserFollowing();
-getCountTweets();
+getCountTweetsStarknet();
+getCountTweetsStarware();
 getTweets();

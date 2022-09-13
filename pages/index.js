@@ -36,9 +36,10 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarEleme
 export async function getServerSideProps() {
   const tweets = await prisma.tweet.findMany();
   const repos = await prisma.repo.findMany();
-  const tweetCount = await prisma.tweetCount.findMany();
+  const tweetCountStarknet = await prisma.tweetCountStarknet.findMany();
+  const tweetCountStarkware = await prisma.tweetCountStarkware.findMany();
   return {
-    props: { tweets, repos, tweetCount },
+    props: { tweets, repos, tweetCountStarknet, tweetCountStarkware },
   };
 }
 
@@ -111,7 +112,34 @@ export default function Home(props) {
     },
   };
 
-  const optionsTweetsCount = {
+  const optionsTweetsCountStarknet = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          color: "#FFFFFF",
+        },
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      xAxis: {
+        ticks: {
+          color: "#FFFFFF",
+        },
+      },
+      yAxis: {
+        ticks: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+  };
+
+  const optionsTweetsCountStarkware = {
     responsive: true,
     plugins: {
       legend: {
@@ -158,7 +186,13 @@ export default function Home(props) {
     return download;
   });
 
-  const tweetsPerDay = props.tweetCount.map((tweetCount, key) => {
+  const tweetsPerDayStarknet = props.tweetCountStarknet.map((tweetCount, key) => {
+    tweetCount.x = moment(tweetCount.end).format("MM/DD/YYYY");
+    tweetCount.y = tweetCount.tweet_count;
+    return tweetCount;
+  });
+
+  const tweetsPerDayStarkware = props.tweetCountStarkware.map((tweetCount, key) => {
     tweetCount.x = moment(tweetCount.end).format("MM/DD/YYYY");
     tweetCount.y = tweetCount.tweet_count;
     return tweetCount;
@@ -192,11 +226,22 @@ export default function Home(props) {
     ],
   };
 
-  const dataTweetCount = {
+  const dataTweetCountStarknet = {
     datasets: [
       {
-        label: "Tweets per day",
-        data: tweetsPerDay,
+        label: "Tweets per day keyword 'Starknet'",
+        data: tweetsPerDayStarknet,
+        borderColor: "rgb(53, 125, 167)",
+        backgroundColor: "rgba(53, 125, 167, 0.8)",
+      },
+    ],
+  };
+
+  const dataTweetCountStarkware = {
+    datasets: [
+      {
+        label: "Tweets per day keyword 'Starkware'",
+        data: tweetsPerDayStarkware,
         borderColor: "rgb(53, 125, 167)",
         backgroundColor: "rgba(53, 125, 167, 0.8)",
       },
@@ -270,15 +315,17 @@ export default function Home(props) {
             </div>
           </div>
           <div className="bg-gray-800 p-3 rounded-lg p-5">
+            <h2 className="text-xl font-bold mb-3">Twitter Activity</h2>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <h2 className="text-xl font-bold mb-3">Twitter Activity</h2>
-                <Line options={optionsTweetsCount} data={dataTweetCount} />
+                <Line options={optionsTweetsCountStarknet} data={dataTweetCountStarknet} />
               </div>
               <div>
-                <a className="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+                <Line options={optionsTweetsCountStarkware} data={dataTweetCountStarkware} />
               </div>
             </div>
+            <a className="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
+            <h2 className="text-xl font-bold mb-3">Last Tweets</h2>
             <Twitter tweets={props.tweets} />
           </div>
         </div>
@@ -288,8 +335,12 @@ export default function Home(props) {
 
       <footer className="text-sm">
         Copyright StarkView - made with 🚀 by{" "}
-        <a href="https://twitter.com/khelil" target="_blank" rel="noreferrer">
+        <a href="https://twitter.com/khelil" target="_blank" rel="noreferrer" className="text-sky-400 hover:text-sky-600">
           @khelil
+        </a>{" "}
+        for{" "}
+        <a href="https://twitter.com/Starkview_" target="_blank" rel="noreferrer" className="text-sky-400 hover:text-sky-600">
+          @Starkview_
         </a>
       </footer>
     </div>

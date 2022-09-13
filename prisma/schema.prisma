@@ -19,7 +19,14 @@ model Tweet {
   created_at String
 }
 
-model TweetCount {
+model TweetCountStarknet {
+  id          String @id @default(cuid())
+  tweet_count Int
+  end         String
+  start       String
+}
+
+model TweetCountStarkware {
   id          String @id @default(cuid())
   tweet_count Int
   end         String
