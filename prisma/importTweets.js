@@ -106,7 +106,7 @@ const getUserFollowers = async () => {
   }
 };
 
-// getUserFollowers();
-// getUserFollowing();
+getUserFollowers();
+getUserFollowing();
 getCountTweets();
 getTweets();
