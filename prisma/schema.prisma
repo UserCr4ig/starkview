@@ -42,3 +42,15 @@ model Repo {
   watchers    Int
   stars       Int
 }
+
+model Follower {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  count     Int
+}
+
+model Following {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  count     Int
+}

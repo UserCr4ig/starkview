@@ -34,12 +34,18 @@ async function getEthBalanceTestnet() {
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
 export async function getServerSideProps() {
-  const tweets = await prisma.tweet.findMany();
-  const repos = await prisma.repo.findMany();
-  const tweetCountStarknet = await prisma.tweetCountStarknet.findMany();
-  const tweetCountStarkware = await prisma.tweetCountStarkware.findMany();
+  let tweets = await prisma.tweet.findMany();
+  let repos = await prisma.repo.findMany();
+  let tweetCountStarknet = await prisma.tweetCountStarknet.findMany();
+  let tweetCountStarkware = await prisma.tweetCountStarkware.findMany();
+  let following = await prisma.following.findMany();
+  following = JSON.parse(JSON.stringify(following));
+
+  let follower = await prisma.follower.findMany();
+  follower = JSON.parse(JSON.stringify(follower));
+
   return {
-    props: { tweets, repos, tweetCountStarknet, tweetCountStarkware },
+    props: { tweets, repos, tweetCountStarknet, tweetCountStarkware, following, follower },
   };
 }
 
@@ -166,6 +172,60 @@ export default function Home(props) {
     },
   };
 
+  const optionsFollower = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          color: "#FFFFFF",
+        },
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      xAxis: {
+        ticks: {
+          color: "#FFFFFF",
+        },
+      },
+      yAxis: {
+        ticks: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+  };
+
+  const optionsFollowing = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+        labels: {
+          color: "#FFFFFF",
+        },
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      xAxis: {
+        ticks: {
+          color: "#FFFFFF",
+        },
+      },
+      yAxis: {
+        ticks: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+  };
+
   const depositAmounts = deposits.map((deposit, key) => {
     const web3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/42a558e0d5fb40c0b7fd0cd64b542b6f"));
     deposit.x = moment.unix(deposit.finishedAtDate).format("MM/DD/YYYY");
@@ -196,6 +256,18 @@ export default function Home(props) {
     tweetCount.x = moment(tweetCount.end).format("MM/DD/YYYY");
     tweetCount.y = tweetCount.tweet_count;
     return tweetCount;
+  });
+
+  const followers = props.follower.map((follower, key) => {
+    follower.x = moment(follower.createdAt).format("MM/DD/YYYY");
+    follower.y = follower.count;
+    return follower;
+  });
+
+  const followings = props.following.map((following, key) => {
+    following.x = moment(following.createdAt).format("MM/DD/YYYY");
+    following.y = following.count;
+    return following;
   });
 
   const data = {
@@ -242,6 +314,28 @@ export default function Home(props) {
       {
         label: "Tweets per day keyword 'Starkware'",
         data: tweetsPerDayStarkware,
+        borderColor: "rgb(53, 125, 167)",
+        backgroundColor: "rgba(53, 125, 167, 0.8)",
+      },
+    ],
+  };
+
+  const dataFollowers = {
+    datasets: [
+      {
+        label: "Followers per day",
+        data: followers,
+        borderColor: "rgb(53, 125, 167)",
+        backgroundColor: "rgba(53, 125, 167, 0.8)",
+      },
+    ],
+  };
+
+  const dataFollowings = {
+    datasets: [
+      {
+        label: "Following per day",
+        data: followings,
         borderColor: "rgb(53, 125, 167)",
         backgroundColor: "rgba(53, 125, 167, 0.8)",
       },
@@ -323,10 +417,16 @@ export default function Home(props) {
               <div>
                 <Line options={optionsTweetsCountStarkware} data={dataTweetCountStarkware} />
               </div>
+              <div>
+                <Line options={optionsFollower} data={dataFollowers} />
+              </div>
+              <div>
+                <Line options={optionsFollowing} data={dataFollowings} />
+              </div>
             </div>
-            <a className="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
-            <h2 className="text-xl font-bold mb-3">Last Tweets</h2>
-            <Twitter tweets={props.tweets} />
+            {/* <a className="twitter-timeline" data-tweet-limit="1" data-chrome="nofooter noborders" data-theme="dark" href="https://twitter.com/StarkWareLtd?ref_src=twsrc%5Etfw"></a> <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script> */}
+            {/* <h2 className="text-xl font-bold mb-3">Last Tweets</h2> */}
+            {/* <Twitter tweets={props.tweets} /> */}
           </div>
         </div>
 
