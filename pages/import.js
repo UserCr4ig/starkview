@@ -99,7 +99,7 @@ const getCountTweetsStarware = async () => {
 const getUserFollowing = async () => {
   console.log("getUserFollowing");
   try {
-    await prisma.following.deleteMany();
+    //await prisma.following.deleteMany();
     const client = new Twitter({
       version: "2",
       extension: false,
@@ -124,7 +124,7 @@ const getUserFollowing = async () => {
 const getUserFollowers = async () => {
   console.log("getUserFollowers");
   try {
-    await prisma.follower.deleteMany();
+    //await prisma.follower.deleteMany();
     const client = new Twitter({
       version: "2",
       extension: false,
