@@ -236,7 +236,7 @@ export default function Home(props) {
   const withdrawAmounts = withdraws.map((withdraw, key) => {
     const web3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/42a558e0d5fb40c0b7fd0cd64b542b6f"));
     withdraw.x = moment.unix(withdraw.finishedAtDate).format("MM/DD/YYYY");
-    withdraw.y = web3.utils.fromWei(withdraw.amount, "ether");
+    withdraw.y = -web3.utils.fromWei(withdraw.amount, "ether");
     return withdraw;
   });
 
@@ -366,11 +366,11 @@ export default function Home(props) {
           </div>
           <div className="bg-gray-800 p-3 rounded-lg p-5 mb-4">
             <h2 className="text-2xl font-bold mb-3">StarkNet Metrics</h2>
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <CardMetric value={etherBalance} label="ETH IN BRIDGE" />
               <CardMetric value={etherTestnetBalance} label="ETH IN BRIDGE (Goerli)" />
             </div>
-            <div className="grid grid-cols-6 gap-4 mb-4">
+            <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-4">
               <CardMetric value={MetricsApi.getCountTransactions(false)} label="Transactions (Mainet)" />
               <CardMetric value={MetricsApi.getCountContracts(false)} label="Contracts (Mainet)" />
               <CardMetric value={MetricsApi.getCountBlocks(false)} label="Blocks (Mainet)" />
@@ -379,7 +379,7 @@ export default function Home(props) {
               <CardMetric value={MetricsApi.getCountBlocks()} label="Blocks (Goerli)" />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div>
               <div className="bg-gray-800 p-3 rounded-lg p-5">
                 <h2 className="flex">
@@ -388,7 +388,7 @@ export default function Home(props) {
                   </svg>
                   <p className="text-xl font-bold ml-3 mb-4">Github</p>
                 </h2>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   {props.repos &&
                     props.repos.map((repo, key) => {
                       return <CardGithub key={key} forks={repo.forks} name={repo.name} watchers={repo.watchers} open_issues={repo.open_issues} stars={repo.stars} url={repo.url} />;
@@ -410,7 +410,7 @@ export default function Home(props) {
           </div>
           <div className="bg-gray-800 p-3 rounded-lg p-5">
             <h2 className="text-xl font-bold mb-3">Twitter Activity</h2>
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div>
                 <Line options={optionsTweetsCountStarknet} data={dataTweetCountStarknet} />
               </div>
