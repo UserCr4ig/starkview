@@ -226,19 +226,23 @@ export default function Home(props) {
     },
   };
 
-  const depositAmounts = deposits.map((deposit, key) => {
-    const web3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/42a558e0d5fb40c0b7fd0cd64b542b6f"));
+  let depositAmounts = deposits.map((deposit, key) => {
     deposit.x = moment.unix(deposit.finishedAtDate).format("MM/DD/YYYY");
-    deposit.y = web3.utils.fromWei(deposit.amount, "ether");
+    deposit.amount = deposit.amount / 8;
+    deposit.y = deposit.amount;
     return deposit;
   });
 
-  const withdrawAmounts = withdraws.map((withdraw, key) => {
-    const web3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/42a558e0d5fb40c0b7fd0cd64b542b6f"));
+  depositAmounts.reverse();
+
+  let withdrawAmounts = withdraws.map((withdraw, key) => {
     withdraw.x = moment.unix(withdraw.finishedAtDate).format("MM/DD/YYYY");
-    withdraw.y = -web3.utils.fromWei(withdraw.amount, "ether");
+    withdraw.amount = withdraw.amount / 8;
+    withdraw.y = -withdraw.amount;
     return withdraw;
   });
+
+  withdrawAmounts.reverse();
 
   const downloadsCount = downloads.map((download, key) => {
     download.x = download.day;

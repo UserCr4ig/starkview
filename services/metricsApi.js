@@ -50,7 +50,7 @@ function getBridgeDeposits() {
 
   const { data, error } = useSWR(
     `{
-      depositEvents(where: {status: FINISHED, amount_gt: 0} orderBy: finishedAtDate, orderDirection: desc) {
+      depositEvents(where: {status: FINISHED} orderBy: finishedAtDate, orderDirection: desc) {
         finishedAtDate
         amount
       }
@@ -69,7 +69,7 @@ function getBridgeWithdraws() {
 
   const { data, error } = useSWR(
     `{
-      withdrawalEvents(where: {status: FINISHED, amount_gt: 0} orderBy: finishedAtDate, orderDirection: desc) {
+      withdrawalEvents(where: {status: FINISHED} orderBy: finishedAtDate, orderDirection: desc) {
         finishedAtDate
         amount
       }
