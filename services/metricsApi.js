@@ -45,12 +45,12 @@ function getCountBlocks(testnet = true) {
   return nbreBlocks;
 }
 
-function getBridgeDeposits() {
+function getBridgeDeposits(bridgeAddress = "0xcf98f0A8edC6a730E1CA6B64a2528c6bE031Cb12") {
   const fetcher = (query) => request("https://api.thegraph.com/subgraphs/name/khelil/starknet-bridge-staging", query);
 
   const { data, error } = useSWR(
     `{
-      depositEvents(where: {status: FINISHED} orderBy: finishedAtDate, orderDirection: desc) {
+      depositEvents(where: {status: FINISHED, amount_gt:0, bridgeAddressL1: "${bridgeAddress}"} orderBy: finishedAtDate, orderDirection: desc) {
         finishedAtDate
         amount
       }
@@ -58,18 +58,18 @@ function getBridgeDeposits() {
     fetcher
   );
 
-  if (error) return <>failed to load</>;
+  if (error) return [];
   if (!data) return [];
 
   return data.depositEvents;
 }
 
-function getBridgeWithdraws() {
+function getBridgeWithdraws(bridgeAddress = "0xcf98f0A8edC6a730E1CA6B64a2528c6bE031Cb12") {
   const fetcher = (query) => request("https://api.thegraph.com/subgraphs/name/khelil/starknet-bridge-staging", query);
 
   const { data, error } = useSWR(
     `{
-      withdrawalEvents(where: {status: FINISHED} orderBy: finishedAtDate, orderDirection: desc) {
+      withdrawalEvents(where: {status: FINISHED, amount_gt:0, bridgeAddressL1: "${bridgeAddress}"} orderBy: finishedAtDate, orderDirection: desc) {
         finishedAtDate
         amount
       }
@@ -77,7 +77,7 @@ function getBridgeWithdraws() {
     fetcher
   );
 
-  if (error) return <>failed to load</>;
+  if (error) return [];
   if (!data) return [];
 
   return data.withdrawalEvents;

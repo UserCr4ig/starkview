@@ -52,8 +52,14 @@ export async function getServerSideProps() {
 export default function Home(props) {
   const [etherBalance, setEtherBalance] = useState(null);
   const [etherTestnetBalance, setTestnetEtherBalance] = useState(null);
-  const deposits = MetricsApi.getBridgeDeposits();
-  const withdraws = MetricsApi.getBridgeWithdraws();
+  const depositsEth = MetricsApi.getBridgeDeposits("0xcf98f0A8edC6a730E1CA6B64a2528c6bE031Cb12");
+  const withdrawsEth = MetricsApi.getBridgeWithdraws("0xcf98f0A8edC6a730E1CA6B64a2528c6bE031Cb12");
+  //
+  const depositsUSDC = MetricsApi.getBridgeDeposits("0xBA9cE9F22A3Cfa7Fcb5c31f6B2748b1e72C06204");
+  const withdrawsUSDC = MetricsApi.getBridgeWithdraws("0xBA9cE9F22A3Cfa7Fcb5c31f6B2748b1e72C06204");
+  //
+  const depositsWBTC = MetricsApi.getBridgeDeposits("0xf29aE3446Ce4688fCc792b232C21D1B9581E7baC");
+  const withdrawsWBTC = MetricsApi.getBridgeWithdraws("0xf29aE3446Ce4688fCc792b232C21D1B9581E7baC");
   const downloads = MetricsApi.getDownloadsNpm();
 
   getEthBalanceMainet().then((result) => {
@@ -69,6 +75,33 @@ export default function Home(props) {
     plugins: {
       legend: {
         position: "top",
+        labels: {
+          color: "#FFFFFF",
+        },
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      xAxis: {
+        ticks: {
+          color: "#FFFFFF",
+        },
+      },
+      yAxis: {
+        ticks: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+  };
+
+  const optionsBottom = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom",
         labels: {
           color: "#FFFFFF",
         },
@@ -226,26 +259,58 @@ export default function Home(props) {
     },
   };
 
-  let depositAmounts = deposits.map((deposit, key) => {
+  console.log("depositsEth", depositsEth);
+  var depositEthAmounts = depositsEth.map((deposit, key) => {
     deposit.x = moment.unix(deposit.finishedAtDate).format("MM/DD/YYYY");
-    deposit.amount = deposit.amount / 8;
-    deposit.y = deposit.amount;
+    deposit.y = deposit.amount / 1000000000000000000;
     return deposit;
   });
+  console.log("depositEthAmounts", depositEthAmounts);
 
-  depositAmounts.reverse();
+  depositEthAmounts.reverse();
 
-  let withdrawAmounts = withdraws.map((withdraw, key) => {
+  let withdrawEthAmounts = withdrawsEth.map((withdraw, key) => {
     withdraw.x = moment.unix(withdraw.finishedAtDate).format("MM/DD/YYYY");
-    withdraw.amount = withdraw.amount / 8;
-    withdraw.y = -withdraw.amount;
+    withdraw.y = withdraw.amount / 1000000000000000000;
     return withdraw;
   });
 
-  withdrawAmounts.reverse();
+  withdrawEthAmounts.reverse();
+
+  var depositUSDCAmounts = depositsUSDC.map((deposit, key) => {
+    deposit.x = moment.unix(deposit.finishedAtDate).format("MM/DD/YYYY");
+    deposit.y = deposit.amount / 1000000;
+    return deposit;
+  });
+
+  depositUSDCAmounts.reverse();
+
+  let withdrawUSDCAmounts = withdrawsUSDC.map((withdraw, key) => {
+    withdraw.x = moment.unix(withdraw.finishedAtDate).format("MM/DD/YYYY");
+    withdraw.y = withdraw.amount / 1000000;
+    return withdraw;
+  });
+
+  withdrawUSDCAmounts.reverse();
+
+  var depositWBTCAmounts = depositsWBTC.map((deposit, key) => {
+    deposit.x = moment.unix(deposit.finishedAtDate).format("MM/DD/YYYY");
+    deposit.y = deposit.amount / 100000000;
+    return deposit;
+  });
+
+  depositWBTCAmounts.reverse();
+
+  let withdrawWBTCAmounts = withdrawsWBTC.map((withdraw, key) => {
+    withdraw.x = moment.unix(withdraw.finishedAtDate).format("MM/DD/YYYY");
+    withdraw.y = withdraw.amount / 100000000;
+    return withdraw;
+  });
+
+  withdrawWBTCAmounts.reverse();
 
   const downloadsCount = downloads.map((download, key) => {
-    download.x = download.day;
+    download.x = moment(download.day).format("MM/DD/YYYY");
     download.y = download.downloads;
     return download;
   });
@@ -274,17 +339,66 @@ export default function Home(props) {
     return following;
   });
 
-  const data = {
+  const dataDepositEth = {
     datasets: [
       {
         label: "Deposits",
-        data: depositAmounts,
+        data: depositEthAmounts,
         borderColor: "rgb(53, 125, 167)",
         backgroundColor: "rgba(53, 125, 167, 0.8)",
       },
+    ],
+  };
+
+  const dataWithdrawEth = {
+    datasets: [
       {
         label: "Withdraws",
-        data: withdrawAmounts,
+        data: withdrawEthAmounts,
+        borderColor: "rgb(72, 169, 166)",
+        backgroundColor: "rgba(72, 169, 166, 0.8)",
+      },
+    ],
+  };
+
+  const dataDepositUSDC = {
+    datasets: [
+      {
+        label: "Deposits",
+        data: depositUSDCAmounts,
+        borderColor: "rgb(53, 125, 167)",
+        backgroundColor: "rgba(53, 125, 167, 0.8)",
+      },
+    ],
+  };
+
+  const dataWithdrawUSDC = {
+    datasets: [
+      {
+        label: "Withdraws",
+        data: withdrawUSDCAmounts,
+        borderColor: "rgb(72, 169, 166)",
+        backgroundColor: "rgba(72, 169, 166, 0.8)",
+      },
+    ],
+  };
+
+  const dataDepositWBTC = {
+    datasets: [
+      {
+        label: "Deposits",
+        data: depositWBTCAmounts,
+        borderColor: "rgb(53, 125, 167)",
+        backgroundColor: "rgba(53, 125, 167, 0.8)",
+      },
+    ],
+  };
+
+  const dataWithdrawWBTC = {
+    datasets: [
+      {
+        label: "Withdraws",
+        data: withdrawWBTCAmounts,
         borderColor: "rgb(72, 169, 166)",
         backgroundColor: "rgba(72, 169, 166, 0.8)",
       },
@@ -359,15 +473,11 @@ export default function Home(props) {
           <Image src={logo} width="70" height="70" alt="StarkView" />
           <div className="pl-3">
             <h1 className="text-5xl font-bold">StarkView</h1>
-            <p>Ultimate StarkNet Dashboard</p>
+            <p>The StarkNet dashboard</p>
           </div>
         </div>
 
         <div className="py-4">
-          <div className="bg-gray-800 p-3 rounded-lg p-5 mb-4">
-            <h2 className="text-2xl font-bold mb-3">Bridge withdraws and deposits (goerli)</h2>
-            <Bar options={options} data={data} />
-          </div>
           <div className="bg-gray-800 p-3 rounded-lg p-5 mb-4">
             <h2 className="text-2xl font-bold mb-3">StarkNet Metrics</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -381,6 +491,37 @@ export default function Home(props) {
               <CardMetric value={MetricsApi.getCountTransactions()} label="Transactions (Goerli)" />
               <CardMetric value={MetricsApi.getCountContracts()} label="Contracts (Goerli)" />
               <CardMetric value={MetricsApi.getCountBlocks()} label="Blocks (Goerli)" />
+            </div>
+          </div>
+          <div className="bg-gray-800 p-3 rounded-lg p-5 mb-4">
+            <h2 className="text-2xl font-bold mb-3">ETH Bridge withdraws and deposits (goerli)</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <Bar options={options} data={dataDepositEth} />
+              </div>
+              <div>
+                <Bar options={options} data={dataWithdrawEth} />
+              </div>
+            </div>
+            <hr className="my-9 border-gray-700"></hr>
+            <h2 className="text-2xl font-bold mb-3">USDC Bridge withdraws and deposits (goerli)</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <Bar options={options} data={dataDepositUSDC} />
+              </div>
+              <div>
+                <Bar options={options} data={dataWithdrawUSDC} />
+              </div>
+            </div>
+            <hr className="my-9 border-gray-700"></hr>
+            <h2 className="text-2xl font-bold mb-3">WBTC Bridge withdraws and deposits (goerli)</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <Bar options={options} data={dataDepositWBTC} />
+              </div>
+              <div>
+                <Bar options={options} data={dataWithdrawWBTC} />
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -433,18 +574,22 @@ export default function Home(props) {
             {/* <Twitter tweets={props.tweets} /> */}
           </div>
         </div>
-
-        <div className=""></div>
       </main>
 
       <footer className="text-sm">
         Copyright StarkView - made with 🚀 by{" "}
-        <a href="https://twitter.com/khelil" target="_blank" rel="noreferrer" className="text-sky-400 hover:text-sky-600">
-          @khelil
-        </a>{" "}
-        for{" "}
         <a href="https://twitter.com/Starkview_" target="_blank" rel="noreferrer" className="text-sky-400 hover:text-sky-600">
           @Starkview_
+        </a>
+        <br></br>
+        Dev Lead:{" "}
+        <a href="https://twitter.com/khelil" target="_blank" rel="noreferrer" className="text-sky-400 hover:text-sky-600">
+          @khelil
+        </a>
+        <br></br>
+        Product Lead:{" "}
+        <a href="https://twitter.com/AuCoinDuCercle" target="_blank" rel="noreferrer" className="text-sky-400 hover:text-sky-600">
+          @AuCoinDuCercle
         </a>
       </footer>
     </div>
