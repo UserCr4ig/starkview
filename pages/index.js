@@ -28,7 +28,7 @@ async function getEthBalanceMainet() {
 
 async function getEthBalanceTestnet() {
   const web3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/42a558e0d5fb40c0b7fd0cd64b542b6f"));
-  const tokenHolder = "0xae0Ee0A63A2cE6BaeEFFE56e7714FB4EFE48D419";
+  const tokenHolder = "0xcf98f0A8edC6a730E1CA6B64a2528c6bE031Cb12";
   const balance = await web3.eth.getBalance(tokenHolder);
   const etherBalance = web3.utils.fromWei(balance, "ether");
   return etherBalance;
