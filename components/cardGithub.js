@@ -1,7 +1,7 @@
 export default function CardGithub(props) {
   return (
     <div>
-      <a href={props.url} className="mb-1 text-sky-200 hover:text-sky-600" target="_blank" rel="noopener">
+      <a href={props.url} className="mb-1 text-sky-200 hover:text-sky-600" target="_blank" rel="noreferrer">
         {props.name}
       </a>
       <div className="flex flex-row text-sm text-slate-400">
