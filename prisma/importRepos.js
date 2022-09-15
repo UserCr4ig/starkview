@@ -4,6 +4,9 @@ const fetch = require("node-fetch");
 
 const githubReposTrack = [
   { organization: "starkware-libs", name: "cairo-lang" },
+  { organization: "starkware-libs", name: "starkgate-frontend" },
+  { organization: "starkware-libs", name: "starkex-js" },
+  { organization: "starkware-libs", name: "starknet-specs" },
   { organization: "starknet-community-libs", name: "get-starknet" },
   { organization: "0xs34n", name: "starknet.js" },
   { organization: "software-mansion", name: "starknet.py" },

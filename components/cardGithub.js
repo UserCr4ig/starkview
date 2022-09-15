@@ -1,7 +1,9 @@
 export default function CardGithub(props) {
   return (
     <div>
-      <p className="mb-1">{props.name}</p>
+      <a href={props.url} className="mb-1 text-sky-200 hover:text-sky-600" target="_blank">
+        {props.name}
+      </a>
       <div className="flex flex-row text-sm text-slate-400">
         <div className="flex items-center">
           <svg aria-hidden="true" viewBox="0 0 16 16" version="1.1" data-view-component="true" className="h-4 w-4">
