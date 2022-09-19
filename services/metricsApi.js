@@ -58,7 +58,9 @@ function getBridgeDeposits(bridgeAddress = "0xcf98f0A8edC6a730E1CA6B64a2528c6bE0
     fetcher
   );
 
-  //if (error) return [];
+  if (error) {
+    return error.response.data.depositEvents;
+  }
   if (!data) return [];
 
   return data.depositEvents;
@@ -77,7 +79,9 @@ function getBridgeWithdraws(bridgeAddress = "0xcf98f0A8edC6a730E1CA6B64a2528c6bE
     fetcher
   );
 
-  //if (error) return [];
+  if (error) {
+    return error.response.data.withdrawalEvents;
+  }
   if (!data) return [];
 
   return data.withdrawalEvents;
