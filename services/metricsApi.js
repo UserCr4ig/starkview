@@ -50,7 +50,7 @@ function getBridgeDeposits(bridgeAddress = "0xcf98f0A8edC6a730E1CA6B64a2528c6bE0
 
   const { data, error } = useSWR(
     `{
-      depositEvents(where: {status: FINISHED, amount_gt:0, bridgeAddressL1: "${bridgeAddress}"} orderBy: finishedAtDate, orderDirection: desc) {
+      depositEvents(subgraphError: allow, where: {status: FINISHED, amount_gt:0, bridgeAddressL1: "${bridgeAddress}"} orderBy: finishedAtDate, orderDirection: desc) {
         finishedAtDate
         amount
       }
@@ -69,7 +69,7 @@ function getBridgeWithdraws(bridgeAddress = "0xcf98f0A8edC6a730E1CA6B64a2528c6bE
 
   const { data, error } = useSWR(
     `{
-      withdrawalEvents(where: {status: FINISHED, amount_gt:0, bridgeAddressL1: "${bridgeAddress}"} orderBy: finishedAtDate, orderDirection: desc) {
+      withdrawalEvents(subgraphError: allow, where: {status: FINISHED, amount_gt:0, bridgeAddressL1: "${bridgeAddress}"} orderBy: finishedAtDate, orderDirection: desc) {
         finishedAtDate
         amount
       }
